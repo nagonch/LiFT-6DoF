@@ -1,4 +1,4 @@
-# LiFT-6DoF: Light Field Based 6DoF Tracking of Previously Unobserved Objects
+# LiFT-6DoF: Light Field based 6DoF Tracking of Previously Unobserved Objects
 
 Project Page: _Coming soon!_
 
