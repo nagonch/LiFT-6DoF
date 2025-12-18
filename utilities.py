@@ -78,7 +78,7 @@ class Visualizer:
     def run(self):
         run_viser_server(self.server)
 
-    def add_point_cloud(self, name, points, colors=None, point_size=1e-5):
+    def add_point_cloud(self, name, points, colors=None, point_size=1e-4):
         if colors is None:
             colors = np.array([255, 0, 0])
         self.scene.add_point_cloud(name, points, colors=colors, point_size=point_size)
@@ -113,7 +113,7 @@ class Visualizer:
             scale=scale,
             line_width=0.5,
             image=image,
-            wxyz=R.from_matrix(rotation).as_quat(scalar_first=True),
+            wxyz=wxyz,
             position=position,
         )
 
