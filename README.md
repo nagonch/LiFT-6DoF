@@ -15,3 +15,10 @@ cd ..
 pip install -e .
 cd ..
 ```
+
+Install Video Depth Anything
+```
+cd Video-Depth-Anything
+pip install -r requirements.txt
+cd ..
+```

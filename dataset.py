@@ -84,10 +84,17 @@ class LFDataset:
             ).cuda()
         else:
             masks = None
-
+        predicted_depth_path = os.path.join(frame_path, "predicted_depth.npy")
+        if os.path.exists(predicted_depth_path):
+            predicted_depth = torch.tensor(
+                np.load(predicted_depth_path), dtype=torch.float64
+            ).cuda()
+        else:
+            predicted_depth = None
         return {
             "LF": LF.cuda(),
             "depth": depth.cuda(),
+            "predicted_depth": predicted_depth,
             "camera_matrix": self.camera_matrix.cuda(),
             "object_pose": object_pose.cuda(),
             "camera_poses": self.camera_poses.cuda(),
