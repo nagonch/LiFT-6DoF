@@ -61,6 +61,30 @@ class LFDataset:
         object_pose = np.loadtxt(os.path.join(self.object_poses_dir, f"{idx:04d}.txt"))
         object_pose = torch.tensor(object_pose, dtype=torch.float64)
 
+        masks_dir = os.path.join(frame_path, "masks")
+        if os.path.exists(masks_dir):
+            mask_paths = sorted(
+                [
+                    os.path.join(masks_dir, f)
+                    for f in os.listdir(masks_dir)
+                    if f.endswith(".png")
+                ]
+            )
+
+            masks = [
+                torch.tensor(np.array(Image.open(p)), dtype=torch.bool)
+                for p in mask_paths
+            ]
+            masks = torch.stack(masks, dim=0)
+            masks = masks.view(
+                self.metadata["n_views"][0],
+                self.metadata["n_views"][1],
+                imgs[0].shape[0],
+                imgs[0].shape[1],
+            ).cuda()
+        else:
+            masks = None
+
         return {
             "LF": LF.cuda(),
             "depth": depth.cuda(),
@@ -70,6 +94,7 @@ class LFDataset:
             "camera_poses_rel": (
                 torch.linalg.inv(self.camera_poses[s_mid, t_mid]) @ self.camera_poses
             ).cuda(),
+            "masks": masks,
             "baseline": self.metadata["x_spacing"],
         }
 
@@ -221,4 +246,6 @@ if __name__ == "__main__":
     for key, value in result.items():
         if not type(value) is str:
             print(key)
+            if key == "masks":
+                print(torch.unique(value), value.shape)
             # print(value)

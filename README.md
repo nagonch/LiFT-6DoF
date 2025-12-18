@@ -13,5 +13,5 @@ Install SAM2
 cd sam2/checkpoints && ./download_ckpts.sh 
 cd ..
 pip install -e .
-cd..
+cd ..
 ```
