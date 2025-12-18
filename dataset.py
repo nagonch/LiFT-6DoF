@@ -13,9 +13,9 @@ class LFDataset:
         )
         with open(f"{self.folder}/metadata.json", "r") as f:
             self.metadata = json.load(f)
-        self.frames = list(sorted(
-            [item for item in os.listdir(self.folder) if "LF_" in item]
-        ))
+        self.frames = list(
+            sorted([item for item in os.listdir(self.folder) if "LF_" in item])
+        )
         self.size = len(self.frames)
         self.camera_poses_dir = os.path.join(self.folder, "camera_poses")
         self.depth_dir = os.path.join(self.folder, "depth")
@@ -35,7 +35,7 @@ class LFDataset:
 
     def __len__(self):
         return self.size
-    
+
     def __getitem__(self, idx):
         frame_path = os.path.join(self.folder, self.frames[idx])
         img_paths = sorted(
@@ -67,9 +67,12 @@ class LFDataset:
             "camera_matrix": self.camera_matrix.cuda(),
             "object_pose": object_pose.cuda(),
             "camera_poses": self.camera_poses.cuda(),
-            "camera_poses_rel": (torch.linalg.inv(self.camera_poses[s_mid, t_mid]) @ self.camera_poses).cuda(),
+            "camera_poses_rel": (
+                torch.linalg.inv(self.camera_poses[s_mid, t_mid]) @ self.camera_poses
+            ).cuda(),
             "baseline": self.metadata["x_spacing"],
         }
+
 
 # class LFDataset:
 #     def __init__(self, folder, is_ref=False):
