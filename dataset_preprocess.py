@@ -1,4 +1,3 @@
-from dataset import LFDataset
 from depth_anything_functions import predict_depth_for_dataset
 from SAM_functions import get_dataset_masks
 import argparse

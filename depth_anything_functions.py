@@ -73,4 +73,4 @@ def predict_depth_for_dataset(dataset_path):
 
 
 if __name__ == "__main__":
-    predict_depth_for_dataset("data/jug_tilt_prod")
+    pass

@@ -161,7 +161,4 @@ def get_dataset_masks(dataset_path, prompt):
 
 
 if __name__ == "__main__":
-    dataset_path = "data/jug_tilt_prod"
-    with open(f"{dataset_path}/gdino_prompt.txt", "r") as file:
-        prompt = file.read()
-    get_dataset_masks(dataset_path, prompt)
+    pass

@@ -1,0 +1,23 @@
+name: Lift6dof
+channels:
+  - nvidia/label/cuda-12.1.0
+  - conda-forge
+  - defaults
+channel_priority: flexible
+dependencies:
+  - python=3.10
+  - cuda-toolkit
+  - cuda-nvcc
+  - pip
+  - pip:
+      - torch
+      - torchvision
+      - torchaudio
+      - numpy
+      - Pillow
+      - viser
+      - transformers
+      - matplotlib
+      - opencv-python
+      - einops
+      - easydict

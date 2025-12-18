@@ -8,6 +8,7 @@ if __name__ == "__main__":
     args.add_argument(
         "--dataset_path",
         type=str,
+        required=True,
         help="Path to the dataset directory",
     )
     args = args.parse_args()

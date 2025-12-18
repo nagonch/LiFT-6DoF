@@ -1,12 +1,7 @@
-from data import LFDataset
-from plenpy.lightfields import LightField
-import numpy as np
 import torch
 from utilities import backproject_depth_to_pointcloud, clean_point_cloud
-from utilities import create_viser_server, run_viser_server, save_to_vis
 from spherical_harmonics import get_SF_coeffs
 from disparity import get_frame_disparity
-from gaussian_splatting.gs_vis import visualize_gs
 
 
 def cluster_rays(LF, depth_center, masks, camera_matrix, baseline):
