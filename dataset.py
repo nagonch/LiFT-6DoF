@@ -95,6 +95,7 @@ class LFDataset:
             "LF": LF.cuda(),
             "depth": depth.cuda(),
             "predicted_depth": predicted_depth,
+            "frame_path": frame_path,
             "camera_matrix": self.camera_matrix.cuda(),
             "object_pose": object_pose.cuda(),
             "camera_poses": self.camera_poses.cuda(),

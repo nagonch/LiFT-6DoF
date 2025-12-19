@@ -152,36 +152,19 @@ def project_frame_to_image(object_to_cam, camera_matrix, image):
 
 
 def visualize_tracking(
-    dataset_path, i_start, object_poses, camera_matrix, save_folder, synth=False
+    dataset_path, object_poses, camera_matrix, save_folder, synth=False
 ):
-    if not synth:
-        os.makedirs(save_folder, exist_ok=True)
-        frames = list(sorted(os.listdir(dataset_path)))
-        frames = [f for f in frames if "LF_" in f][i_start:]
-        camera_matrix = camera_matrix.cpu().numpy()
-        for i, (frames, pose) in enumerate(zip(frames, object_poses)):
-            pose = pose.cpu().numpy()
-            all_frames = sorted(os.listdir(f"{dataset_path}/{frames}/imgs"))
-            mid_frame_path = (
-                f"{dataset_path}/{frames}/imgs/{all_frames[len(all_frames) // 2]}"
-            )
-            mid_frame = np.array(Image.open(mid_frame_path))
-            img_vis = project_frame_to_image(pose, camera_matrix, mid_frame)
-            Image.fromarray(img_vis).save(f"{save_folder}/{str(i).zfill(4)}.png")
-    else:
-        frames_path = os.path.join(dataset_path, "LF_images")
-        mid_images = []
-        for i in range(len(os.listdir(frames_path))):
-            frame_dir = os.path.join(frames_path, f"frame_{i}")
-            all_frames = sorted(os.listdir(frame_dir))
-            mid_frame_path = os.path.join(frame_dir, all_frames[len(all_frames) // 2])
-            mid_images.append(np.array(Image.open(mid_frame_path)))
-        os.makedirs(save_folder, exist_ok=True)
-        camera_matrix = camera_matrix.cpu().numpy()
-        for i, (mid_frame, pose) in enumerate(zip(mid_images[i_start:], object_poses)):
-            pose = pose.cpu().numpy()
-            img_vis = project_frame_to_image(pose, camera_matrix, mid_frame)
-            Image.fromarray(img_vis).save(f"{save_folder}/{str(i).zfill(4)}.png")
+    os.makedirs(save_folder, exist_ok=True)
+    frames = list(sorted(os.listdir(dataset_path)))
+    frames = [f for f in frames if "LF_" in f]
+    camera_matrix = camera_matrix.cpu().numpy()
+    for i, (frames, pose) in enumerate(zip(frames, object_poses)):
+        pose = pose.cpu().numpy()
+        all_frames = sorted(os.listdir(f"{dataset_path}/{frames}"))
+        mid_frame_path = f"{dataset_path}/{frames}/{all_frames[len(all_frames) // 2]}"
+        mid_frame = np.array(Image.open(mid_frame_path))
+        img_vis = project_frame_to_image(pose, camera_matrix, mid_frame)
+        Image.fromarray(img_vis).save(f"{save_folder}/{str(i).zfill(4)}.png")
 
 
 if __name__ == "__main__":
