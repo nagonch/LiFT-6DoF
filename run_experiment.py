@@ -86,8 +86,7 @@ def main():
     is_synth = False
 
     dataset_path = EXP_CONFIG["dataset-path"]
-    dataset = LFDataset(dataset_path, is_ref=False)
-    # dataset = LFSynthData(dataset_path)
+    dataset = LFDataset(dataset_path)
     i_start = 10
     if_finish = -1
     frame0 = dataset[i_start]
@@ -123,11 +122,12 @@ def main():
         coarse_poses_stacked = torch.stack(coarse_poses).float().detach()
 
         pose_errors = compute_pose_errors(gt_poses_stacked, est_poses_stacked)
-        _, _, adds_err_vals, add_err_vals = get_metrics(
-            gt_poses_stacked, EXP_CONFIG["object-mesh-path"], est_poses_stacked
-        )
-        pose_errors["adds_err"] = adds_err_vals
-        pose_errors["add_err"] = add_err_vals
+        if EXP_CONFIG["object-mesh-path"]:
+            _, _, adds_err_vals, add_err_vals = get_metrics(
+                gt_poses_stacked, EXP_CONFIG["object-mesh-path"], est_poses_stacked
+            )
+            pose_errors["adds_err"] = adds_err_vals
+            pose_errors["add_err"] = add_err_vals
 
         # SAVE RESULTS
         torch.save(gt_poses_stacked, f"{exp_path}/gt_poses.pt")

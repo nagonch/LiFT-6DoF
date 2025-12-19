@@ -61,36 +61,36 @@ def get_LF_disparity(LF, denoise_param=35, sigma=1.5):
 
 def fuse_disparities(
     disparity,
-    dam_disparity,
+    predicted_depth,
     sanity_mask,
     max_disparity=100,
 ):
     sanity_mask = sanity_mask & (disparity < max_disparity)
     reliable_disparities = disparity[sanity_mask].reshape(-1).float()
-    corresponding_dam_disparities = dam_disparity[sanity_mask].reshape(-1).float()
+    corresponding_dam_disparities = predicted_depth[sanity_mask].reshape(-1).float()
     X = torch.stack(
         [corresponding_dam_disparities, torch.ones_like(corresponding_dam_disparities)],
         dim=1,
     )
     sol = torch.linalg.lstsq(X, reliable_disparities).solution
     alpha, beta = sol[0], sol[1]
-    result_disparities = alpha * dam_disparity + beta
+    result_disparities = alpha * predicted_depth + beta
     return result_disparities
 
 
 def get_frame_disparity(frame, min_fit_confidence=0.9):
     LF = frame["LF"]
-    dam_disparity = frame["dam_disparity"]
+    predicted_depth = frame["predicted_depth"]
 
     LF_disparity, confidence = get_LF_disparity(
         LF.cpu().numpy(),
     )
     LF_disparity, confidence = torch.tensor(
-        LF_disparity, device=dam_disparity.device
-    ), torch.tensor(confidence, device=dam_disparity.device)
+        LF_disparity, device=predicted_depth.device
+    ), torch.tensor(confidence, device=predicted_depth.device)
     sanity_mask = confidence > min_fit_confidence
     result_disparity = fuse_disparities(
-        LF_disparity, dam_disparity, sanity_mask=sanity_mask
+        LF_disparity, predicted_depth, sanity_mask=sanity_mask
     )
     return result_disparity
 
