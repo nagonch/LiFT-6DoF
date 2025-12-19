@@ -1,7 +1,7 @@
 import torch
-from utilities import backproject_depth_to_pointcloud, clean_point_cloud
-from spherical_harmonics import get_SF_coeffs
-from disparity import get_frame_disparity
+from .utilities import backproject_depth_to_pointcloud, clean_point_cloud
+from .spherical_harmonics import get_SF_coeffs
+from .disparity import get_frame_disparity
 
 
 def cluster_rays(LF, depth_center, masks, camera_matrix, baseline):

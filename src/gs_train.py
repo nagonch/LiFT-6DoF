@@ -1,13 +1,12 @@
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from dataset import LFDataset
 from gsplat.strategy import DefaultStrategy
 import viser
 from pathlib import Path
 import time
-from gaussian_splatting.gsplat_viewer import GsplatViewer
-from gaussian_splatting.train_tools import (
+from .gaussian_splatting.gsplat_viewer import GsplatViewer
+from .gaussian_splatting.train_tools import (
     get_optimizers_and_params,
     viewer_render_fn as _viewer_render_fn,
     unfreeze_sh,
@@ -16,7 +15,7 @@ from gaussian_splatting.train_tools import (
     get_scheduler,
     mask_aware_loss,
 )
-from gaussian_splatting.default_strategy import DefaultStrategy
+from .gaussian_splatting.default_strategy import DefaultStrategy
 from random import shuffle
 from dataclasses import dataclass
 from torch.nn.utils import clip_grad_norm_

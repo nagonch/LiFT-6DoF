@@ -1,13 +1,11 @@
-from dataset import LFDataset
-from disparity import get_frame_disparity
-from functional import get_gs_initialization
+from .disparity import get_frame_disparity
+from .functional import get_gs_initialization
 import torch
-from utilities import Visualizer, backproject_depth_to_pointcloud
-from tqdm import tqdm
-from gs_train import train_splat
-from refine_pose import refine_splat_camera_poses
+from .utilities import backproject_depth_to_pointcloud
+from .gs_train import train_splat
+from .refine_pose import refine_splat_camera_poses
 import os
-from icp_align import align_colored_point_clouds_np
+from .icp_align import align_colored_point_clouds_np
 import yaml
 
 with open("config.yaml", "r") as f:

@@ -1,5 +1,5 @@
-from dataset import LFDataset
-from utilities import Visualizer, backproject_depth_to_pointcloud
+from src.dataset import LFDataset
+from src.utilities import Visualizer, backproject_depth_to_pointcloud
 import numpy as np
 import argparse
 

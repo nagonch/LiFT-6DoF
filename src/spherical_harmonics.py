@@ -1,6 +1,5 @@
-import gsplat
 import torch
-from gsplat.cuda._torch_impl import _eval_sh_bases_fast, _spherical_harmonics
+from gsplat.cuda._torch_impl import _eval_sh_bases_fast
 from e3nn import o3
 
 

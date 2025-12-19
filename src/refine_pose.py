@@ -1,19 +1,18 @@
 import torch
 import torch.nn as nn
 import torch.optim as optim
-import matplotlib.pyplot as plt
 import viser
 from pathlib import Path
 import time
-from gaussian_splatting.gsplat_viewer import GsplatViewer
-from gaussian_splatting.train_tools import (
+from .gaussian_splatting.gsplat_viewer import GsplatViewer
+from .gaussian_splatting.train_tools import (
     get_optimizers_and_params,
     viewer_render_fn as _viewer_render_fn,
     batch_rasterize,
     viewer_tick,
     mask_aware_loss_img,
 )
-from spherical_harmonics import transform_shs
+from .spherical_harmonics import transform_shs
 from dataclasses import dataclass
 from torch.nn.utils import clip_grad_norm_
 from torch.nn import functional as F

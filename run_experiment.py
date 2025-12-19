@@ -1,11 +1,11 @@
-from dataset import LFDataset
+from src.dataset import LFDataset
 import torch
 import yaml
 import os
-from pose_tracker import PoseTracker
-from metrics import compute_pose_errors, get_add_metrics
+from src.pose_tracker import PoseTracker
+from src.metrics import compute_pose_errors, get_add_metrics
 import shutil
-from utilities import visualize_tracking
+from src.utilities import visualize_tracking
 from tqdm import tqdm
 
 
