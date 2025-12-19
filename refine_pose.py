@@ -265,7 +265,7 @@ def refine_splat_camera_poses(
             output_dir=Path("/gs_output"),
             mode="training",
         )
-    for epoch in tqdm(range(config.num_epochs), desc="Training Epochs"):
+    for epoch in tqdm(range(config.num_epochs), desc="Refining Epochs"):
         # for optimizer in optimizers:
         #     for param_group in optimizer.param_groups:
         #         param_group["lr"] = (

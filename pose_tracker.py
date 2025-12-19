@@ -8,6 +8,10 @@ from gs_train import train_splat
 from refine_pose import refine_splat_camera_poses
 import os
 from icp_align import align_colored_point_clouds_np
+import yaml
+
+with open("config.yaml", "r") as f:
+    EXP_CONFIG = yaml.safe_load(f)
 
 
 def align_point_clouds(pc_src, pc_tgt, colors_src, colors_tgt):
@@ -24,14 +28,14 @@ class PoseTracker:
     def __init__(
         self,
         init_frame,
-        init_opacity=0.1,
-        enable_viewer=True,
-        n_develop_epochs=1000,
-        develop_lr=1e-3,
-        max_gaussians=15_000,
-        n_pose_refine_epochs=400,
-        refine_lr=1e-3,
-        enable_cache=False,
+        init_opacity=EXP_CONFIG["pose-tracker"]["init_opacity"],
+        enable_viewer=EXP_CONFIG["pose-tracker"]["enable_viewer"],
+        n_develop_epochs=EXP_CONFIG["pose-tracker"]["n_develop_epochs"],
+        develop_lr=EXP_CONFIG["pose-tracker"]["develop_lr"],
+        max_gaussians=EXP_CONFIG["pose-tracker"]["max_gaussians"],
+        n_pose_refine_epochs=EXP_CONFIG["pose-tracker"]["n_pose_refine_epochs"],
+        refine_lr=EXP_CONFIG["pose-tracker"]["refine_lr"],
+        enable_cache=EXP_CONFIG["pose-tracker"]["enable_cache"],
     ):
         self.camera_matrix = init_frame["camera_matrix"]
         self.init_opacity = init_opacity
