@@ -7,7 +7,7 @@ Authors: [Nikolai Goncharov](https://www.linkedin.com/in/nikolai-goncharov-2931a
 Paper link: https://arxiv.org/abs/2512.13007
 Dataset link: https://ses.library.usyd.edu.au/handle/2123/34631
 
-## Installation
+## 🛠️ Installation
 Clone our repo recursively
 ```
 git clone https://github.com/nagonch/LiFT-6DoF.git --recursive
@@ -29,8 +29,8 @@ Run docker container
 bash run_container.sh
 ```
 
-## Running code
-Download 
+## 🚀 Usage
+Download test dataset sequence
 ```
 curl -L \
   -H "User-Agent: Mozilla/5.0" \
@@ -42,5 +42,5 @@ unzip jug_tilt_prod.zip -d data/jug_tilt_prod
 
 Modify `config.yaml` as required and then run code
 ```
-python run_container.sh
+python run_experiment.py
 ```
