@@ -30,45 +30,7 @@ from torch.optim.lr_scheduler import (
     StepLR,
 )
 from matplotlib import pyplot as plt
-from fused_ssim import FusedSSIMMap
 from torchvision.transforms import Resize
-
-
-def fused_weighted_ssim_loss(
-    pred,
-    gt,
-    mask,
-    weight,
-    *,
-    padding="same",
-    train=True,
-    C1=0.01**2,
-    C2=0.03**2,
-    eps=1e-8,
-):
-    B, H, W, C = pred.shape
-    pred = pred.permute(0, 3, 1, 2).contiguous()
-    gt = gt.permute(0, 3, 1, 2).contiguous()
-    mask = mask.unsqueeze(1)
-    weight = weight.unsqueeze(1)
-
-    ssim_map = FusedSSIMMap.apply(C1, C2, pred, gt, padding, train)
-    if padding == "valid":
-        mask = mask[..., 5:-5, 5:-5]
-        weight = weight[..., 5:-5, 5:-5]
-
-    eff_weight = (mask.float() * weight).clamp_min(0.0)
-    ssim_flat = ssim_map.reshape(B, C, -1)
-    w_flat = eff_weight.reshape(B, 1, -1)
-    w_sum = w_flat.sum(dim=2)
-    mean_per_ch = torch.where(
-        w_sum > 0,
-        (ssim_flat * w_flat).sum(dim=2) / (w_sum + eps),
-        torch.ones_like(w_sum),
-    )
-    mean_per_sample = mean_per_ch.mean(dim=1)
-    loss = 1.0 - mean_per_sample
-    return loss.mean()
 
 
 def resize(rendered, gt, depth, alphas, mask, coeff):
@@ -430,9 +392,6 @@ def refine_splat_camera_poses(
         # weights = weights[..., 0]
         # loss *= weights
         loss = loss.mean()
-        # loss += ssim_weight * fused_weighted_ssim_loss(
-        #     rendered, images, masks, weights, padding="valid", train=True
-        # )
         loss.backward()
         losses_log.append(loss.item())
         translation_log_x.append(rel_translation.detach().cpu().numpy()[0])

@@ -3,6 +3,9 @@ import viser
 import time
 import numpy as np
 from scipy.spatial.transform import Rotation as R
+import os
+from PIL import Image
+import cv2
 
 
 def clean_point_cloud(points, sigma_max=2):
@@ -116,6 +119,69 @@ class Visualizer:
             wxyz=wxyz,
             position=position,
         )
+
+
+def project_frame_to_image(object_to_cam, camera_matrix, image):
+    frame_3d = np.array(
+        [
+            [0, 0, 0, 1],
+            [0.1, 0, 0, 1],
+            [0, 0.1, 0, 1],
+            [0, 0, 0.1, 1],
+        ]
+    ).T
+
+    frame_in_cam = object_to_cam @ frame_3d
+
+    points_3d = frame_in_cam[:3, :].T
+
+    points_2d = (camera_matrix @ points_3d.T).T
+    points_2d = points_2d[:, :2] / points_2d[:, 2:]
+
+    img_vis = image.copy()
+    origin = tuple(points_2d[0].astype(int))
+    x_axis = tuple(points_2d[1].astype(int))
+    y_axis = tuple(points_2d[2].astype(int))
+    z_axis = tuple(points_2d[3].astype(int))
+
+    cv2.line(img_vis, origin, x_axis, (0, 0, 255), 2)
+    cv2.line(img_vis, origin, y_axis, (0, 255, 0), 2)
+    cv2.line(img_vis, origin, z_axis, (255, 0, 0), 2)
+
+    return img_vis
+
+
+def visualize_tracking(
+    dataset_path, i_start, object_poses, camera_matrix, save_folder, synth=False
+):
+    if not synth:
+        os.makedirs(save_folder, exist_ok=True)
+        frames = list(sorted(os.listdir(dataset_path)))
+        frames = [f for f in frames if "LF_" in f][i_start:]
+        camera_matrix = camera_matrix.cpu().numpy()
+        for i, (frames, pose) in enumerate(zip(frames, object_poses)):
+            pose = pose.cpu().numpy()
+            all_frames = sorted(os.listdir(f"{dataset_path}/{frames}/imgs"))
+            mid_frame_path = (
+                f"{dataset_path}/{frames}/imgs/{all_frames[len(all_frames) // 2]}"
+            )
+            mid_frame = np.array(Image.open(mid_frame_path))
+            img_vis = project_frame_to_image(pose, camera_matrix, mid_frame)
+            Image.fromarray(img_vis).save(f"{save_folder}/{str(i).zfill(4)}.png")
+    else:
+        frames_path = os.path.join(dataset_path, "LF_images")
+        mid_images = []
+        for i in range(len(os.listdir(frames_path))):
+            frame_dir = os.path.join(frames_path, f"frame_{i}")
+            all_frames = sorted(os.listdir(frame_dir))
+            mid_frame_path = os.path.join(frame_dir, all_frames[len(all_frames) // 2])
+            mid_images.append(np.array(Image.open(mid_frame_path)))
+        os.makedirs(save_folder, exist_ok=True)
+        camera_matrix = camera_matrix.cpu().numpy()
+        for i, (mid_frame, pose) in enumerate(zip(mid_images[i_start:], object_poses)):
+            pose = pose.cpu().numpy()
+            img_vis = project_frame_to_image(pose, camera_matrix, mid_frame)
+            Image.fromarray(img_vis).save(f"{save_folder}/{str(i).zfill(4)}.png")
 
 
 if __name__ == "__main__":
