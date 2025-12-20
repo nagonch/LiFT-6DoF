@@ -15,7 +15,13 @@ git clone https://github.com/nagonch/LiFT-6DoF.git --recursive
 
 Download SAM2 checkpoints
 ```
-cd sam2/checkpoints && ./download_ckpts.sh 
+cd sam2/checkpoints && ./download_ckpts.sh
+cd ../..
+```
+
+Download VideoDepthAnything checkpoints
+```
+cd Video-Depth-Anything && bash get_weights.sh
 cd ..
 ```
 
@@ -24,12 +30,6 @@ Build docker container
 docker build -t lift6dof .
 ```
 
-Run docker container
-```
-bash run_container.sh
-```
-
-## 🚀 Usage
 Download test dataset sequence
 ```
 curl -L \
@@ -37,7 +37,18 @@ curl -L \
   "https://ses.library.usyd.edu.au/bitstream/handle/2123/34631/jug_tilt_prod.zip?sequence=2&isAllowed=y" \
   -o jug_tilt_prod.zip
 mkdir data
-unzip jug_tilt_prod.zip -d data/jug_tilt_prod
+unzip jug_tilt_prod.zip -d data
+```
+
+## 🚀 Usage
+Run docker container
+```
+bash run_container.sh
+```
+
+Preprocess the dataset (SAM2 segmentation + VideoDepthAnything inference)
+```
+python dataset_preprocess.py --dataset_path data/jug_tilt_prod
 ```
 
 Modify `config.yaml` as required and then run code
