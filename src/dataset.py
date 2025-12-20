@@ -7,6 +7,7 @@ from PIL import Image
 
 class LFDataset:
     def __init__(self, folder):
+        assert os.path.exists(folder), f"Folder {folder} does not exist."
         self.folder = folder
         self.camera_matrix = torch.tensor(
             np.loadtxt(f"{self.folder}/camera_matrix.txt"), dtype=torch.float64
