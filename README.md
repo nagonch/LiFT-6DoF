@@ -51,7 +51,12 @@ Preprocess the dataset (SAM2 segmentation + VideoDepthAnything inference)
 python dataset_preprocess.py --dataset_path data/jug_tilt_prod
 ```
 
-Modify `config.yaml` as required and then run code
+_Optional_: Visualize the dataset
+```
+python dataset_vis.py --dataset_path data/jug_tilt_prod
+```
+
+Modify `config.yaml` as required and then run tracking
 ```
 python run_experiment.py
 ```
